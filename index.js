@@ -59,7 +59,7 @@ async function run() {
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
-    // books related apis
+    // books relateds apis
 
     const bookCollection = client.db('LibroHub').collection('books')
     const borrowCollection = client.db('LibroHub').collection('borrowedBooks')
