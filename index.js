@@ -64,7 +64,7 @@ async function run() {
     const bookCollection = client.db('LibroHub').collection('books')
     const borrowCollection = client.db('LibroHub').collection('borrowedBooks')
 
-    // Auth related Apis
+    // Auth relateds Apis
 
     app.post('/jwt', async (req, res) => {
       const user = req.body
