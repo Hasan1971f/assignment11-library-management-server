@@ -93,7 +93,7 @@ async function run() {
       if (category) {
         query = { category: category }
       }
-      const cursor = bookCollection.find()
+      const cursor = bookCollection.find(query)
       const result = await cursor.toArray()
       res.send(result)
 
@@ -129,7 +129,7 @@ async function run() {
       res.send(result);
     })
 
-    // API Endpoint for updating book details
+    // API Endpoint for updating books details
     app.put('/books/:id', async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) }
