@@ -11,7 +11,11 @@ const port = process.env.PORT || 5000
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 app.use(cors({
-  origin: ['http://localhost:5173'],
+  origin: [
+    'http://localhost:5173',
+    'https://library-management-syste-f478f.web.app',
+    'https://library-management-syste-f478f.firebaseapp.com'
+  ],
   credentials: true
 }))
 app.use(express.json())
@@ -54,9 +58,9 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
     // books relateds apis
@@ -74,7 +78,9 @@ async function run() {
       res
         .cookie('token', token, {
           httpOnly: true,
-          secure: false,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+
         })
         .send({ success: true })
     })
@@ -82,7 +88,8 @@ async function run() {
     app.post('/logout', (req, res) => {
       res.clearCookie('token', {
         httpOnly: true,
-        secure: false
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       })
         .send({ success: true })
     })
@@ -113,7 +120,7 @@ async function run() {
     })
 
     app.get('/books/:id', async (req, res) => {
-      const id = req.params
+      const id = req.params.id
       const result = await bookCollection.findOne({ _id: new ObjectId(id) })
       res.send(result)
 
@@ -207,7 +214,10 @@ async function run() {
       res.send(result);
     })
 
-    
+
+
+
+
 
 
 
@@ -227,6 +237,6 @@ app.listen(port, () => {
   console.log(`Assignment 11 running on: ${port}`)
 })
 
-// 
-// 
+//
+//
 // 
